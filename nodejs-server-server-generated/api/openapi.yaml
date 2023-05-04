@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: SI Templates
+  description: Template Configuration
+  version: 1.0.0
+servers:
+- url: "http://localhost:8080/"
+  variables:
+    env:
+      enum:
+      - sit
+      - uat
+      - prd
+      default: sit
+paths:
+  /pdfToBase64:
+    post:
+      operationId: pdfToBase64POST
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/convertRequest'
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/convertResponse'
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    convertRequest:
+      title: Root Type for pdfRequest
+      required:
+      - organisation_id
+      - pdfFile
+      - templateKey
+      type: object
+      properties:
+        pdfFile:
+          type: string
+          format: binary
+        templateKey:
+          type: string
+        organisation_id:
+          type: string
+      description: ""
+      example:
+        pdfFile: ""
+        templateKey: ""
+        organisation_id: ""
+    convertResponse:
+      title: Root Type for pdfResponse
+      type: object
+      properties:
+        organization:
+          type: string
+        version:
+          type: integer
+          format: int32
+        effectiveDT:
+          type: string
+          format: date-time
+        expiryDT:
+          type: string
+          format: date-time
+        status:
+          type: string
+        template:
+          type: string
+        templateKey:
+          type: string
+        tid:
+          type: string
+      description: ""
+      example:
+        organization: ""
+        version: 1
+        effectiveDT: 2022-08-18T08:06:13.128Z
+        expiryDT: 2999-08-18T08:06:13.128Z
+        status: ACTIVE
+        template: "{\"file\":\"data/application;base64,\"}"
+        templateKey: ilp
+        tid: ilp
